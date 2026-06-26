@@ -54,6 +54,15 @@ function populateFilters() {
   for (const field of Object.keys(filterSelects)) {
     const values = [...new Set(allRecords.map(r => r[field]).filter(Boolean))].sort();
     const select = filterSelects[field];
+    const group = select.closest('.filter-group');
+
+    // 无有效值时隐藏该筛选器
+    if (values.length === 0) {
+      if (group) group.style.display = 'none';
+      continue;
+    }
+    if (group) group.style.display = '';
+
     while (select.options.length > 1) select.remove(1);
     for (const val of values) {
       const option = document.createElement('option');
@@ -100,6 +109,7 @@ function buildCard(record) {
   const tags = [];
   if (record.grade) tags.push(`<span class="card-tag tag-grade">${record.grade}</span>`);
   if (record.subject) tags.push(`<span class="card-tag tag-subject">${record.subject}</span>`);
+  if (record.region) tags.push(`<span class="card-tag tag-region">${record.region}</span>`);
   if (record.category) tags.push(`<span class="card-tag tag-category">${record.category}</span>`);
   if (record.feedback_type) tags.push(`<span class="card-tag tag-feedback">${record.feedback_type}</span>`);
 
